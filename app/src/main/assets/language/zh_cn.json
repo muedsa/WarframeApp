@@ -47,7 +47,13 @@
     "Nightmare Rescue": "噩梦救援",
     "Nightmare Spy": "噩梦间谍",
     "Nightmare Survival": "噩梦生存",
-    "MT_EVACUATION": "叛逃"
+    "MT_EVACUATION": "叛逃",
+    "Grineer Offensive": "G佬进攻",
+    "Corpus Offensive": "G佬进攻",
+    "Grineer Siege": "G佬围攻",
+    "Corpus Siege": "C佬围攻",
+    "Infested Outbreak": "I系爆发",
+    "PHORID Manifestation": "PHORID刺杀"
   },
   "faction": {
     "Grineer": "G佬",
@@ -79,6 +85,9 @@
     "Tellurium": "碲 ",
     "Detonite Ampule": "爆燃安瓿",
     "Detonite Injector": "爆燃喷射器",
+    "Fieldron": "电磁力场装置",
+    "Mutagen Mass": "突变原聚合物",
+    "Mutalist Alad V Nav Coordinate": "异融AV坐标",
     "Nitain Extract": "泥炭萃取物",
     "Void Traces": "虚空光体",
     "Synthula": "合成刺激质",
@@ -189,6 +198,8 @@
     "Hemlock Saryn Helmet Blueprint": "Saryn Hemlock头盔蓝图",
     "Chlora Saryn Helmet Blueprint": "Saryn Chlora头盔蓝图",
     "Aurai Titania Helmet Blueprint": "Titania Aurai头盔蓝图",
+    "Aura Trinity Helmet Blueprint": "Trinity Aura头盔蓝图",
+    "Meridian Trinity Helmet Blueprint": "Trinity Meridian头盔蓝图",
     "Bastet Valkyr Helmet Blueprint": "Valkyr Bastet头盔蓝图",
     "Kara Valkyr Helmet Blueprint": "Valkyr Kara头盔蓝图",
     "Esprit Vauban Helmet Blueprint": "Vauban Esprit头盔蓝图",
@@ -201,8 +212,8 @@
     "Macak Wukong Helmet Blueprint": "Wukong Macak头盔蓝图",
     "Cierzo Zephyr Helmet Blueprint": "Zephyr Cierzo头盔蓝图",
     "Tengu Zephyr Helmet Blueprint": "Zephyr Tengu头盔蓝图",
-
     "Brokk Hammer Skin Blueprint": "Brokk Hammer外观蓝图",
-    "RangerAltBHelmetBlueprint": "RangerAltB头盔蓝图"
+    "RangerAltBHelmetBlueprint": "RangerAltB头盔蓝图",
+    "Manticore Axe Skin Blueprint": "蝎尾狮重斧外观"
   }
 }

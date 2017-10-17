@@ -1,12 +1,10 @@
 package com.muedsa.wfapp.adapter;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +25,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.MyViewHolder> {
+public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHolder> {
 
     private AlertWorker alertWorker;
     private Handler workHandler;
     private Handler timeHandler;
     private ArrayList<Alert> alerts;
-
     private AlertFragment alertFragment;
-
     private Translation translation;
 
     public AlertAdapter(AlertFragment alertFragment){
@@ -87,20 +83,20 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.MyViewHolder
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AlertViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alert, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
+        AlertViewHolder holder = new AlertViewHolder(view);
         return holder;
     }
 
 
     @Override
-    public void onViewRecycled(MyViewHolder holder) {
+    public void onViewRecycled(AlertViewHolder holder) {
         super.onViewRecycled(holder);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(AlertViewHolder holder, int position) {
         Alert alert = alerts.get(position);
         String planet = alert.getPlanet();
         planet = this.translation.getPlanet(planet);
@@ -166,10 +162,14 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return alerts.size();
+        int count = 0;
+        if(this.alerts != null){
+            count = this.alerts.size();
+        }
+        return count;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder
+    class AlertViewHolder extends RecyclerView.ViewHolder
     {
 
         ImageView imgView;
@@ -180,7 +180,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.MyViewHolder
         TextView tv5;
         ProgressBar progressBar;
 
-        public MyViewHolder(View view)
+        public AlertViewHolder(View view)
         {
             super(view);
             imgView = (ImageView) view.findViewById(R.id.imageView);

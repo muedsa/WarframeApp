@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.muedsa.wfapp.fragment.AlertFragment;
+import com.muedsa.wfapp.fragment.InvasionFragment;
 
 public class TabAdapter extends FragmentPagerAdapter{
 
@@ -17,13 +18,13 @@ public class TabAdapter extends FragmentPagerAdapter{
         Fragment fragment = null;
         switch (position){
             case 0:
-                fragment = new AlertFragment();
+                fragment = AlertFragment.newInstance();
                 break;
             case 1:
-                fragment = new AlertFragment();
+                fragment = InvasionFragment.newInstance();
                 break;
             case 2:
-                fragment = new AlertFragment();
+                fragment = new Fragment();
                 break;
         }
         return fragment;

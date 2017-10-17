@@ -63,7 +63,7 @@ public class AlertWorker {
 
     public static ArrayList<Alert> decode(String data){
         ArrayList<Alert> encodeData = new ArrayList<>();
-        if (data != null){
+        if (data != null && !"".equals(data)){
             String[] alerts = data.split("\n");
             for(String str : alerts){
                 String[] arr = str.split("\\|");
@@ -91,6 +91,7 @@ public class AlertWorker {
     }
 
     public void run(){
+        Log.d("WFA", "AlertWorkRun!");
         new Thread(network).start();
     }
 }
