@@ -1,5 +1,5 @@
 # MUedsa's Warframe App
-提供Warframe警报,入侵,虚空遗物的中文信息, from [deathsnacks.com](https://deathsnacks.com/wf)
+提供Warframe警报,入侵,虚空裂缝的中文信息, from [deathsnacks.com](https://deathsnacks.com/wf)
 
 下载地址:[Releases](https://github.com/MUedsa/WarframeApp/releases) 
 
