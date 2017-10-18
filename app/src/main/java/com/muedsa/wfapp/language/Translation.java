@@ -19,6 +19,7 @@ public class Translation {
     private JSONObject translation;
     private JSONObject planet;
     private JSONObject mission;
+    private JSONObject modifier;
     private JSONObject faction;
     private JSONObject awards;
 
@@ -36,6 +37,7 @@ public class Translation {
             this.translation = new JSONObject(stringBuilder.toString());
             this.planet = this.translation.getJSONObject("planet");
             this.mission = this.translation.getJSONObject("mission");
+            this.modifier = this.translation.getJSONObject("modifier");
             this.faction = this.translation.getJSONObject("faction");
             this.awards = this.translation.getJSONObject("awards");
         } catch (Exception e) {
@@ -74,6 +76,18 @@ public class Translation {
             //Log.d("WFA", e.getMessage());
         }
         return mission;
+    }
+
+    public String getModifier(String en){
+        String modifier = en;
+        try {
+            if(this.modifier != null)
+                modifier = this.modifier.getString(en);
+        } catch (JSONException e) {
+            //e.printStackTrace();
+            //Log.d("WFA", e.getMessage());
+        }
+        return modifier;
     }
 
     public String getFaction(String en){

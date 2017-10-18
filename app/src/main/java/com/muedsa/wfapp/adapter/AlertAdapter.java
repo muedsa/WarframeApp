@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +29,8 @@ import java.util.Date;
 public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHolder> {
 
     private AlertWorker alertWorker;
-    private Handler workHandler;
-    private Handler timeHandler;
+    private Handler workerHandler;
+    private Handler timerHandler;
     private ArrayList<Alert> alerts;
     private AlertFragment alertFragment;
     private Translation translation;
@@ -38,7 +39,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
         this.alerts = new ArrayList<>();
         this.alertFragment = alertFragment;
 
-        workHandler = new Handler(){
+        this.workerHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -47,7 +48,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
                 AlertAdapter.this.notifyDataSetChanged();
             }
         };
-        timeHandler = new Handler(){
+        this.timerHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -57,10 +58,8 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
             }
         };
         this.translation = Translation.getInstance(this.alertFragment.getActivity(), "zh_cn");
-
-        this.alertWorker = new AlertWorker(workHandler);
+        this.alertWorker = new AlertWorker(workerHandler);
         this.alertWorker.run();
-
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -68,10 +67,10 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
                 while (true){
                     try {
                         Thread.sleep(1000/7);
-                        AlertAdapter.this.timeHandler.sendMessage(new Message());
+                        AlertAdapter.this.timerHandler.sendMessage(new Message());
                         i++;
                         if(i > 60*1000/(1000/7)){
-                            new AlertWorker(workHandler).run();
+                            AlertAdapter.this.alertWorker.run();
                             i = 0;
                         }
                     } catch (InterruptedException e) {
@@ -87,12 +86,6 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_alert, parent, false);
         AlertViewHolder holder = new AlertViewHolder(view);
         return holder;
-    }
-
-
-    @Override
-    public void onViewRecycled(AlertViewHolder holder) {
-        super.onViewRecycled(holder);
     }
 
     @Override
@@ -142,7 +135,6 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
             text = "即将开始:" + (startTime - curTime) + "秒";
         }else if(curTime > endTime){
             text = "已结束";
-            new AlertWorker(workHandler).run();
         }else{
             if(hour > 0){
                 text += hour + "小时";

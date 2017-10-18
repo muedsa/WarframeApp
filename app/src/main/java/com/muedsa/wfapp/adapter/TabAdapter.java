@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.muedsa.wfapp.fragment.AlertFragment;
 import com.muedsa.wfapp.fragment.InvasionFragment;
+import com.muedsa.wfapp.fragment.VoidFissureFragment;
 
 public class TabAdapter extends FragmentPagerAdapter{
 
@@ -24,7 +25,7 @@ public class TabAdapter extends FragmentPagerAdapter{
                 fragment = InvasionFragment.newInstance();
                 break;
             case 2:
-                fragment = new Fragment();
+                fragment = VoidFissureFragment.newInstance();
                 break;
         }
         return fragment;
@@ -46,7 +47,7 @@ public class TabAdapter extends FragmentPagerAdapter{
                 title = "入侵";
                 break;
             case 2:
-                title = "虚空遗物";
+                title = "虚空裂缝";
                 break;
         }
         return title;
