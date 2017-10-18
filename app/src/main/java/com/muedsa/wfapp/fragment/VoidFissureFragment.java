@@ -1,17 +1,14 @@
 package com.muedsa.wfapp.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.muedsa.wfapp.R;
 import com.muedsa.wfapp.activity.MainActivity;
-import com.muedsa.wfapp.adapter.InvasionAdapter;
 import com.muedsa.wfapp.adapter.VoidFissureAdapter;
 
 public class VoidFissureFragment extends Fragment {
