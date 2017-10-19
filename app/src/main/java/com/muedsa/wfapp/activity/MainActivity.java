@@ -1,7 +1,8 @@
 package com.muedsa.wfapp.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -70,8 +70,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Snackbar.make(mViewPager , "Todo:任务通知设置", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+//            Snackbar.make(mViewPager , "Todo:任务通知设置", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show();
+            Intent intent = new Intent();
+            intent.setAction("android.intent.action.VIEW");
+            Uri content_url = Uri.parse("https://github.com/MUedsa/WarframeApp");
+            intent.setData(content_url);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

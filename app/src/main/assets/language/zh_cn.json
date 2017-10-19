@@ -55,6 +55,12 @@
     "Infested Outbreak": "I系爆发",
     "PHORID Manifestation": "PHORID刺杀"
   },
+  "modifier": {
+    "VoidT1": "古纪",
+    "VoidT2": "前纪",
+    "VoidT3": "中级",
+    "VoidT4": "后级"
+  },
   "faction": {
     "Grineer": "G佬",
     "Corpus": "C佬",
@@ -98,6 +104,7 @@
     "Vauban Chassis Blueprint": "Vauban机体蓝图",
     "Vauban Systems Blueprint": "Vauban系统蓝图",
     "Kubrow Egg": "库伯蛋",
+    "Kavat Genetic Code": "库娃遗传基因",
     "Constitution": "百折不挠",
     "Ice Storm": "冰风暴",
     "Fortitude": "不屈不挠",

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.muedsa.wfapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +24,4 @@
             android:name="io.fabric.ApiKey"
             android:value="e255c55eb8d8f73b652dbe100fbf851765fbf120" />
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
