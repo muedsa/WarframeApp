@@ -1,7 +1,6 @@
 package com.muedsa.wfapp.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +11,10 @@ import android.view.MenuItem;
 import com.crashlytics.android.answers.Answers;
 import com.muedsa.wfapp.R;
 import com.muedsa.wfapp.adapter.TabAdapter;
+import com.crashlytics.android.Crashlytics;
+import com.muedsa.wfapp.service.AlertService;
+import com.muedsa.wfapp.worker.ConfigWorker;
+
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Answers());
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,6 +62,21 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(tabAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ConfigWorker configWorker = ConfigWorker.getInstance(getApplicationContext());
+        Intent intent = new Intent();
+        intent.setClass(this, AlertService.class);
+        if(configWorker.isNotify()){
+            startService(intent);
+        }else{
+            stopService(intent);
+        }
     }
 
     @Override
@@ -70,12 +89,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-//            Snackbar.make(mViewPager , "Todo:任务通知设置", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
             Intent intent = new Intent();
-            intent.setAction("android.intent.action.VIEW");
-            Uri content_url = Uri.parse("https://github.com/MUedsa/WarframeApp");
-            intent.setData(content_url);
+//            intent.setAction("android.intent.action.VIEW");
+//            Uri content_url = Uri.parse("https://github.com/MUedsa/WarframeApp");
+//            intent.setData(content_url);
+            intent.setClass(MainActivity.this, SettingActivity.class);
             startActivity(intent);
             return true;
         }

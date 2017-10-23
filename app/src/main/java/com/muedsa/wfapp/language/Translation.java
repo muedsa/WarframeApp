@@ -135,4 +135,8 @@ public class Translation {
 
         return t_awards;
     }
+
+    public JSONObject getAwards() {
+        return awards;
+    }
 }

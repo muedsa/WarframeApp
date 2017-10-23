@@ -52,7 +52,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(((MainActivity)AlertAdapter.this.alertFragment.getActivity()).threadLock == 1){
+                if(AlertAdapter.this.alertFragment.getActivity() != null && ((MainActivity)AlertAdapter.this.alertFragment.getActivity()).threadLock == 1){
                     AlertAdapter.this.notifyDataSetChanged();
                 }
             }
