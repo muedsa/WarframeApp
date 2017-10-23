@@ -3,12 +3,14 @@ package com.muedsa.wfapp.service;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -41,51 +43,55 @@ public class AlertService extends IntentService {
                 Bundle data = msg.getData();
                 ArrayList<Alert> results = data.getParcelableArrayList("alerts");
                 for(Alert alert : results){
+                    boolean isExist = true;
                     for(Alert temp : alerts){
-                        if(!alert.getId().equals(temp.getId())){
-                            Integer startTime = Integer.parseInt(alert.getStartTime());
-                            String planet = alert.getPlanet();
-                            planet = translation.getPlanet(planet);
-                            String mission = alert.getMission();
-                            mission = translation.getMission(mission);
-                            String faction = alert.getFaction();
-                            faction = translation.getFaction(faction);
-                            String awards = alert.getAwards();
-                            String[][] t_awards = translation.getAwards(awards);
-                            awards = "";
-                            String moreWorth  = t_awards[t_awards.length-1][2];
-                            for(int i=0; i<t_awards.length;i++){
-                                awards += t_awards[i][0] + " " + t_awards[i][1] + "\n";
+                        if(alert.getId().equals(temp.getId())) {
+                            isExist = false;
+                        }
+                    }
+                    if(!isExist){
+                        Integer startTime = Integer.parseInt(alert.getStartTime());
+                        String planet = alert.getPlanet();
+                        planet = translation.getPlanet(planet);
+                        String mission = alert.getMission();
+                        mission = translation.getMission(mission);
+                        String faction = alert.getFaction();
+                        faction = translation.getFaction(faction);
+                        String awards = alert.getAwards();
+                        String[][] t_awards = translation.getAwards(awards);
+                        awards = "";
+                        String moreWorth  = t_awards[t_awards.length-1][2];
+                        for(int i=0; i<t_awards.length;i++){
+                            awards += t_awards[i][0] + " " + t_awards[i][1] + "\n";
+                        }
+                        String[] items = configWorker.getNotficationItems();
+                        isExist = false;
+                        for (int i=0; i<items.length;i++){
+                            if(items[i].equals(moreWorth)){
+                                isExist = true;
                             }
-                            String[] items = configWorker.getNotficationItems();
-                            boolean isExist = false;
-                            for (int i=0; i<items.length;i++){
-                                if(items[i].equals(moreWorth)){
-                                    isExist = true;
-                                }
-                            }
-                            if(isExist){
-                                //moreWorth = moreWorth.toLowerCase().replaceAll(" ", "_");
-                                moreWorth = t_awards[t_awards.length-1][1];
-                                NotificationCompat.Builder mBuilder =
-                                        new NotificationCompat.Builder(AlertService.this)
-                                                .setSmallIcon(R.mipmap.ic_launcher)
-                                                .setContentTitle(moreWorth)
-                                                .setContentText(alert.getPlace()+ "(" + planet + ") " + mission + "(" + faction + ")");
-                                Intent resultIntent = new Intent(AlertService.this, MainActivity.class);
-                                TaskStackBuilder stackBuilder = TaskStackBuilder.create(AlertService.this);
-                                stackBuilder.addParentStack(MainActivity.class);
-                                stackBuilder.addNextIntent(resultIntent);
-                                PendingIntent resultPendingIntent =
-                                        stackBuilder.getPendingIntent(
-                                                0,
-                                                PendingIntent.FLAG_UPDATE_CURRENT
-                                        );
-                                mBuilder.setContentIntent(resultPendingIntent);
-                                NotificationManager mNotificationManager =
-                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                mNotificationManager.notify(startTime, mBuilder.build());
-                            }
+                        }
+                        if(isExist){
+                            //moreWorth = moreWorth.toLowerCase().replaceAll(" ", "_");
+                            moreWorth = t_awards[t_awards.length-1][1];
+                            NotificationCompat.Builder mBuilder =
+                                    new NotificationCompat.Builder(AlertService.this)
+                                            .setSmallIcon(R.mipmap.ic_launcher)
+                                            .setContentTitle(moreWorth)
+                                            .setContentText(alert.getPlace()+ "(" + planet + ") " + mission + "(" + faction + ")");
+                            Intent resultIntent = new Intent(AlertService.this, MainActivity.class);
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(AlertService.this);
+                            stackBuilder.addParentStack(MainActivity.class);
+                            stackBuilder.addNextIntent(resultIntent);
+                            PendingIntent resultPendingIntent =
+                                    stackBuilder.getPendingIntent(
+                                            0,
+                                            PendingIntent.FLAG_UPDATE_CURRENT
+                                    );
+                            mBuilder.setContentIntent(resultPendingIntent);
+                            NotificationManager mNotificationManager =
+                                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            mNotificationManager.notify(startTime, mBuilder.build());
                         }
                     }
                 }
@@ -110,5 +116,11 @@ public class AlertService extends IntentService {
                 Thread.currentThread().interrupt();
             }
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
+        return Service.START_STICKY;
     }
 }

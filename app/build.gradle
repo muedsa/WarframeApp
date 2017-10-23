@@ -22,8 +22,8 @@ android {
         applicationId "com.muedsa.wfapp"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 3
-        versionName "0.3"
+        versionCode 5
+        versionName "0.4.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -40,6 +40,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile('com.crashlytics.sdk.android:answers:1.4.0@aar') {
+        transitive = true;
+    }
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true;
     }
     compile 'com.android.support:appcompat-v7:24.2.1'
