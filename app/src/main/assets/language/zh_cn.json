@@ -221,6 +221,16 @@
     "Tengu Zephyr Helmet Blueprint": "Zephyr Tengu头盔蓝图",
     "Brokk Hammer Skin Blueprint": "Brokk Hammer外观蓝图",
     "RangerAltBHelmetBlueprint": "RangerAltB头盔蓝图",
-    "Manticore Axe Skin Blueprint": "蝎尾狮重斧外观"
+
+    "Manticore Axe Skin Blueprint": "蝎尾狮重斧外观蓝图",
+
+    "GrinnerCombatKinfeSortieBlade": "希芙刀刃",
+    "GrinnerCombatKinfeSortieHeatsink": "希芙连接器",
+    "GrinnerCombatKinfeSortieHilt": "希芙握柄",
+    "GrinnerCombatKinfeSortieBlueprint": "希芙蓝图",
+    "SnipetronVandalBarrel": "狙击特昂破坏者枪管",
+    "SnipetronVandalReceiver": "狙击特昂破坏者枪机",
+    "SnipetronVandalStock": "狙击特昂破坏者枪托",
+    "SnipetronVandalBlueprint": "狙击特昂破坏者蓝图"
   }
 }
