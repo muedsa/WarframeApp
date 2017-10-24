@@ -53,7 +53,14 @@ public class VersionWorker {
             }
             Message msg = new Message();
             Bundle bundle = new Bundle();
-            bundle.putInt("versionCode", Integer.parseInt(version));
+            int versionCode = 0;
+            try{
+                versionCode = Integer.parseInt(version);
+            }
+            catch (Exception e){
+                versionCode = 0;
+            }
+            bundle.putInt("versionCode", versionCode);
             msg.setData(bundle);
             handler.sendMessage(msg);
         }
