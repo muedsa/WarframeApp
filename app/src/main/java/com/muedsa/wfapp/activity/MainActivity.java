@@ -1,7 +1,13 @@
 package com.muedsa.wfapp.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
@@ -14,13 +20,43 @@ import com.muedsa.wfapp.adapter.TabAdapter;
 import com.crashlytics.android.Crashlytics;
 import com.muedsa.wfapp.service.AlertService;
 import com.muedsa.wfapp.worker.ConfigWorker;
+import com.muedsa.wfapp.worker.VersionWorker;
 
 import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
+    private Handler versionHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            int versionCode = bundle.getInt("versionCode");
+            int currentVersion;
+            try {
+                currentVersion = MainActivity.this.getPackageManager().getPackageInfo(MainActivity.this.getPackageName(), 0).versionCode;
+            } catch (PackageManager.NameNotFoundException e) {
+                throw new RuntimeException("WTF!!!");
+            }
 
+            if(versionCode > 0 && versionCode > currentVersion){
+                AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("更新")
+                        .setMessage("发现新版本，是否更新?")
+                        .setNegativeButton("忽略更新", null)
+                        .setPositiveButton("更新", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/MUedsa/WarframeApp/releases")));
+                            }
+                        })
+                        .create();
+                dialog.show();
+            }
+        }
+    };
+    private VersionWorker versionWorker;
     public int threadLock;
 
     @Override
@@ -63,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        this.versionWorker = new VersionWorker(this.versionHandler);
 
     }
 
@@ -77,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         }else{
             stopService(intent);
         }
+
+        this.versionWorker.run();
     }
 
     @Override
@@ -99,4 +138,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
