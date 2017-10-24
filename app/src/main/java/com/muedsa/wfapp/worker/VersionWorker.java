@@ -12,11 +12,6 @@ import com.muedsa.wfapp.model.Alert;
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-
-/**
- * Created by muedsa on 2017/10/24.
- */
 
 public class VersionWorker {
     public static final String WORKER_URL = "https://raw.githubusercontent.com/MUedsa/WarframeApp/master/version";
