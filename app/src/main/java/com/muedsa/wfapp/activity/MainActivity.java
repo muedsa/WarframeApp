@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.crashlytics.android.answers.Answers;
@@ -33,13 +34,12 @@ public class MainActivity extends AppCompatActivity {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
             int versionCode = bundle.getInt("versionCode");
-            int currentVersion;
+            int currentVersion = 0;
             try {
                 currentVersion = MainActivity.this.getPackageManager().getPackageInfo(MainActivity.this.getPackageName(), 0).versionCode;
             } catch (PackageManager.NameNotFoundException e) {
                 throw new RuntimeException("WTF!!!");
             }
-
             if(versionCode > 0 && versionCode > currentVersion){
                 AlertDialog dialog = new AlertDialog.Builder(MainActivity.this)
                         .setTitle("更新")
@@ -65,12 +65,9 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Answers());
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         threadLock = 1;
-
         TabAdapter tabAdapter = new TabAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         }else{
             stopService(intent);
         }
-
         this.versionWorker.run();
     }
 
@@ -129,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent intent = new Intent();
-//            intent.setAction("android.intent.action.VIEW");
-//            Uri content_url = Uri.parse("https://github.com/MUedsa/WarframeApp");
-//            intent.setData(content_url);
             intent.setClass(MainActivity.this, SettingActivity.class);
             startActivity(intent);
             return true;

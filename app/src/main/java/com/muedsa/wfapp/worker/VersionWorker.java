@@ -4,11 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
-import com.muedsa.wfapp.model.Alert;
-
 import java.io.BufferedInputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -23,7 +18,7 @@ public class VersionWorker {
         public void run() {
             String version = "";
             try {
-                URL url = new URL(AlertWorker.WORKER_URL);
+                URL url = new URL(VersionWorker.WORKER_URL);
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.connect();
                 bis = new BufferedInputStream(urlConnection.getInputStream());
