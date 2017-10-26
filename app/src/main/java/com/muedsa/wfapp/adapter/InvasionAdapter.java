@@ -91,6 +91,10 @@ public class InvasionAdapter extends RecyclerView.Adapter<InvasionAdapter.Invasi
         try {
             InputStream inputStreamA = this.invasionFragment.getActivity().getAssets().open("image/" + moreWorthA + ".png");
             bitmapA = BitmapFactory.decodeStream(inputStreamA);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
             InputStream inputStreamB = this.invasionFragment.getActivity().getAssets().open("image/" + moreWorthB + ".png");
             bitmapB = BitmapFactory.decodeStream(inputStreamB);
         } catch (IOException e) {
