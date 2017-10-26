@@ -59,7 +59,12 @@ public class InvasionWorker {
             bundle.putParcelableArrayList("invasions", invasions);
             msg.setData(bundle);
             handler.sendMessage(msg);
-            Answers.getInstance().logCustom(new CustomEvent("Invasion Worker Run Success"));
+            try{
+                Answers.getInstance().logCustom(new CustomEvent("Invasion Worker Run Success"));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
     };
 

@@ -53,7 +53,13 @@ public class AlertWorker {
             bundle.putParcelableArrayList("alerts", alerts);
             msg.setData(bundle);
             handler.sendMessage(msg);
-            Answers.getInstance().logCustom(new CustomEvent("Alert Worker Run Success"));
+            try{
+                Answers.getInstance().logCustom(new CustomEvent("Alert Worker Run Success"));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
     };
 

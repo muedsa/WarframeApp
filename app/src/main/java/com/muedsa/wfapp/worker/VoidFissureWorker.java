@@ -60,7 +60,12 @@ public class VoidFissureWorker {
             bundle.putParcelableArrayList("voidFissures", voidFissures);
             msg.setData(bundle);
             handler.sendMessage(msg);
-            Answers.getInstance().logCustom(new CustomEvent("VoidFissure Worker Run Success"));
+            try{
+                Answers.getInstance().logCustom(new CustomEvent("VoidFissure Worker Run Success"));
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
     };
 
