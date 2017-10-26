@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -18,8 +19,10 @@ import com.muedsa.wfapp.R;
 import com.muedsa.wfapp.activity.MainActivity;
 import com.muedsa.wfapp.language.Translation;
 import com.muedsa.wfapp.model.Alert;
+import com.muedsa.wfapp.model.Invasion;
 import com.muedsa.wfapp.worker.AlertWorker;
 import com.muedsa.wfapp.worker.ConfigWorker;
+import com.muedsa.wfapp.worker.InvasionWorker;
 
 import java.util.ArrayList;
 
@@ -29,8 +32,10 @@ public class AlertService extends IntentService {
     private ConfigWorker configWorker;
     private AlertWorker alertWorker;
     private Handler alertHandler;
-
     private ArrayList<Alert> alerts;
+    private InvasionWorker invasionWorker;
+    private Handler invasionHandler;
+    private ArrayList<Invasion> invasions;
 
     public AlertService(){
         super("AlertService");
@@ -50,7 +55,6 @@ public class AlertService extends IntentService {
                         }
                     }
                     if(!isExist){
-                        Integer startTime = Integer.parseInt(alert.getStartTime());
                         String planet = alert.getPlanet();
                         planet = translation.getPlanet(planet);
                         String mission = alert.getMission();
@@ -91,7 +95,7 @@ public class AlertService extends IntentService {
                             mBuilder.setContentIntent(resultPendingIntent);
                             NotificationManager mNotificationManager =
                                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            mNotificationManager.notify(startTime, mBuilder.build());
+                            mNotificationManager.notify(alert.getId().hashCode(), mBuilder.build());
                         }
                     }
                 }
@@ -99,6 +103,94 @@ public class AlertService extends IntentService {
             }
         };
         this.alertWorker = new AlertWorker(this.alertHandler);
+
+        this.invasionHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Bundle data = msg.getData();
+                ArrayList<Invasion> results = data.getParcelableArrayList("invasions");
+                for (Invasion invasion : results){
+                    boolean isExist = true;
+                    for(Invasion temp : invasions){
+                        if(invasion.getId().equals(temp.getId())) {
+                            isExist = false;
+                        }
+                    }
+                    if(!isExist){
+                        String awardsA = invasion.getAwardsA();
+                        String[][] t_awardsA = AlertService.this.translation.getAwards(awardsA);
+                        awardsA = "";
+                        String moreWorthA  = t_awardsA[t_awardsA.length-1][2];
+                        for(int i=0; i<t_awardsA.length;i++){
+                            awardsA += t_awardsA[i][0] + " " + t_awardsA[i][1] + "\n";
+                        }
+                        String awardsB = invasion.getAwardsB();
+                        String[][] t_awardsB = AlertService.this.translation.getAwards(awardsB);
+                        awardsB = "";
+                        String moreWorthB  = t_awardsB[t_awardsB.length-1][2];
+                        for(int i=0; i<t_awardsB.length;i++){
+                            awardsB += t_awardsB[i][0] + " " + t_awardsB[i][1] + "\n";
+                        }
+                        //moreWorthA = moreWorthA.toLowerCase().replaceAll(" ", "_");
+                        //moreWorthB = moreWorthB.toLowerCase().replaceAll(" ", "_");
+                        String[] items = configWorker.getNotficationItems();
+                        boolean isExistA = false;
+                        boolean isExistB = false;
+                        for (int i=0; i<items.length;i++){
+                            if(items[i].equals(moreWorthA)){
+                                isExistA = true;
+                            }
+                            if(items[i].equals(moreWorthB)){
+                                isExistB = true;
+                            }
+                        }
+                        if(isExistA || isExistB){
+                            String place = invasion.getPlace();
+                            String planet = invasion.getPlanet();
+                            planet = AlertService.this.translation.getPlanet(planet);
+                            String factionA = invasion.getFactionA();
+                            factionA = AlertService.this.translation.getFaction(factionA);
+                            String factionB = invasion.getFactionB();
+                            factionB = AlertService.this.translation.getFaction(factionB);
+                            String type = invasion.getType();
+                            type = AlertService.this.translation.getMission(type);
+
+                            String moreWorth;
+                            if(isExistA){
+                                moreWorth = t_awardsA[t_awardsA.length-1][1];
+                            }else{
+                                moreWorth = t_awardsA[t_awardsA.length-1][1];
+                            }
+                            NotificationCompat.Builder mBuilder =
+                                    new NotificationCompat.Builder(AlertService.this)
+                                            .setSmallIcon(R.mipmap.ic_launcher)
+                                            .setContentTitle(moreWorth)
+                                            .setContentText(place + "(" + planet + ") " + type + " " + factionA + " vs " + factionB);
+                            Intent resultIntent = new Intent(AlertService.this, MainActivity.class);
+                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(AlertService.this);
+                            stackBuilder.addParentStack(MainActivity.class);
+                            stackBuilder.addNextIntent(resultIntent);
+                            PendingIntent resultPendingIntent =
+                                    stackBuilder.getPendingIntent(
+                                            0,
+                                            PendingIntent.FLAG_UPDATE_CURRENT
+                                    );
+                            mBuilder.setContentIntent(resultPendingIntent);
+                            NotificationManager mNotificationManager =
+                                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                            mNotificationManager.notify(invasion.getId().hashCode(), mBuilder.build());
+                        }
+
+
+
+                    }
+                }
+
+            }
+        };
+
+        this.invasionWorker = new InvasionWorker(this.invasionHandler);
     }
 
     @Override
@@ -107,8 +199,8 @@ public class AlertService extends IntentService {
         this.configWorker = ConfigWorker.getInstance(this);
         while (true){
             try {
-                Log.d("WFA", "AlertService");
                 this.alertWorker.run();
+                this.invasionWorker.run();
                 Thread.sleep(2 * 60 * 1000);
             }
             catch (Exception e){
