@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-
 public class ConfigWorker {
 
     public static final String CONFIG_NAME = "notfication.json";

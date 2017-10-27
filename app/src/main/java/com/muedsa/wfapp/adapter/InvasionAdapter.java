@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.muedsa.wfapp.R;
 import com.muedsa.wfapp.fragment.InvasionFragment;
 import com.muedsa.wfapp.language.Translation;
@@ -93,12 +96,14 @@ public class InvasionAdapter extends RecyclerView.Adapter<InvasionAdapter.Invasi
             bitmapA = BitmapFactory.decodeStream(inputStreamA);
         } catch (IOException e) {
             e.printStackTrace();
+            //Answers.getInstance().logCustom(new CustomEvent("Unkown Item").putCustomAttribute("item", moreWorthA));
         }
         try {
             InputStream inputStreamB = this.invasionFragment.getActivity().getAssets().open("image/" + moreWorthB + ".png");
             bitmapB = BitmapFactory.decodeStream(inputStreamB);
         } catch (IOException e) {
             e.printStackTrace();
+            //Answers.getInstance().logCustom(new CustomEvent("Unkown Item").putCustomAttribute("item", moreWorthB));
         }
         if(bitmapA != null){
             holder.imgView1.setImageBitmap(bitmapA);

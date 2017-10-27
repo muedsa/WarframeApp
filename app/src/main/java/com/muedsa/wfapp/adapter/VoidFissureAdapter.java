@@ -47,7 +47,7 @@ public class VoidFissureAdapter extends RecyclerView.Adapter<VoidFissureAdapter.
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if(((MainActivity)VoidFissureAdapter.this.voidFissureFragment.getActivity()).threadLock == 1){
+                if(VoidFissureAdapter.this.voidFissureFragment.getActivity() != null && ((MainActivity)VoidFissureAdapter.this.voidFissureFragment.getActivity()).threadLock == 1){
                     VoidFissureAdapter.this.notifyDataSetChanged();
                 }
             }

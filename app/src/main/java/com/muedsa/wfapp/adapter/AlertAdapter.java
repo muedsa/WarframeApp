@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.muedsa.wfapp.R;
 import com.muedsa.wfapp.activity.MainActivity;
 import com.muedsa.wfapp.fragment.AlertFragment;
@@ -111,6 +113,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
             bitmap = BitmapFactory.decodeStream(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
+            //Answers.getInstance().logCustom(new CustomEvent("Unkown Item").putCustomAttribute("item", moreWorth));
         }
         if(bitmap != null){
             holder.imgView.setImageBitmap(bitmap);

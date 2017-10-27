@@ -40,7 +40,7 @@ public class AlertService extends IntentService {
     public AlertService(){
         super("AlertService");
         this.alerts = new ArrayList<>();
-
+        this.invasions  = new ArrayList<>();
         this.alertHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -48,10 +48,10 @@ public class AlertService extends IntentService {
                 Bundle data = msg.getData();
                 ArrayList<Alert> results = data.getParcelableArrayList("alerts");
                 for(Alert alert : results){
-                    boolean isExist = true;
+                    boolean isExist = false;
                     for(Alert temp : alerts){
                         if(alert.getId().equals(temp.getId())) {
-                            isExist = false;
+                            isExist = true;
                         }
                     }
                     if(!isExist){
@@ -111,10 +111,10 @@ public class AlertService extends IntentService {
                 Bundle data = msg.getData();
                 ArrayList<Invasion> results = data.getParcelableArrayList("invasions");
                 for (Invasion invasion : results){
-                    boolean isExist = true;
+                    boolean isExist = false;
                     for(Invasion temp : invasions){
                         if(invasion.getId().equals(temp.getId())) {
-                            isExist = false;
+                            isExist = true;
                         }
                     }
                     if(!isExist){
@@ -155,38 +155,52 @@ public class AlertService extends IntentService {
                             factionB = AlertService.this.translation.getFaction(factionB);
                             String type = invasion.getType();
                             type = AlertService.this.translation.getMission(type);
-
-                            String moreWorth;
-                            if(isExistA){
-                                moreWorth = t_awardsA[t_awardsA.length-1][1];
-                            }else{
-                                moreWorth = t_awardsA[t_awardsA.length-1][1];
+                            if(isExistA && !"cr".equals(moreWorthA)){
+                                moreWorthA = t_awardsA[t_awardsA.length-1][1];
+                                NotificationCompat.Builder mBuilder =
+                                        new NotificationCompat.Builder(AlertService.this)
+                                                .setSmallIcon(R.mipmap.ic_launcher)
+                                                .setContentTitle(moreWorthA)
+                                                .setContentText(place + "(" + planet + ") " + type + " " + factionA + " vs " + factionB);
+                                Intent resultIntent = new Intent(AlertService.this, MainActivity.class);
+                                TaskStackBuilder stackBuilder = TaskStackBuilder.create(AlertService.this);
+                                stackBuilder.addParentStack(MainActivity.class);
+                                stackBuilder.addNextIntent(resultIntent);
+                                PendingIntent resultPendingIntent =
+                                        stackBuilder.getPendingIntent(
+                                                0,
+                                                PendingIntent.FLAG_UPDATE_CURRENT
+                                        );
+                                mBuilder.setContentIntent(resultPendingIntent);
+                                NotificationManager mNotificationManager =
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                mNotificationManager.notify(invasion.getId().hashCode(), mBuilder.build());
                             }
-                            NotificationCompat.Builder mBuilder =
-                                    new NotificationCompat.Builder(AlertService.this)
-                                            .setSmallIcon(R.mipmap.ic_launcher)
-                                            .setContentTitle(moreWorth)
-                                            .setContentText(place + "(" + planet + ") " + type + " " + factionA + " vs " + factionB);
-                            Intent resultIntent = new Intent(AlertService.this, MainActivity.class);
-                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(AlertService.this);
-                            stackBuilder.addParentStack(MainActivity.class);
-                            stackBuilder.addNextIntent(resultIntent);
-                            PendingIntent resultPendingIntent =
-                                    stackBuilder.getPendingIntent(
-                                            0,
-                                            PendingIntent.FLAG_UPDATE_CURRENT
-                                    );
-                            mBuilder.setContentIntent(resultPendingIntent);
-                            NotificationManager mNotificationManager =
-                                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            mNotificationManager.notify(invasion.getId().hashCode(), mBuilder.build());
+                            if(isExistB && !"cr".equals(moreWorthB)){
+                                moreWorthB = t_awardsB[t_awardsB.length-1][1];
+                                NotificationCompat.Builder mBuilder =
+                                        new NotificationCompat.Builder(AlertService.this)
+                                                .setSmallIcon(R.mipmap.ic_launcher)
+                                                .setContentTitle(moreWorthB)
+                                                .setContentText(place + "(" + planet + ") " + type + " " + factionA + " vs " + factionB);
+                                Intent resultIntent = new Intent(AlertService.this, MainActivity.class);
+                                TaskStackBuilder stackBuilder = TaskStackBuilder.create(AlertService.this);
+                                stackBuilder.addParentStack(MainActivity.class);
+                                stackBuilder.addNextIntent(resultIntent);
+                                PendingIntent resultPendingIntent =
+                                        stackBuilder.getPendingIntent(
+                                                0,
+                                                PendingIntent.FLAG_UPDATE_CURRENT
+                                        );
+                                mBuilder.setContentIntent(resultPendingIntent);
+                                NotificationManager mNotificationManager =
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                mNotificationManager.notify(invasion.getId().hashCode(), mBuilder.build());
+                            }
                         }
-
-
-
                     }
                 }
-
+                invasions = results;
             }
         };
 
