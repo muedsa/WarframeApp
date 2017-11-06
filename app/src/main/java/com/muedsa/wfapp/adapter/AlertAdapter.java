@@ -2,6 +2,7 @@ package com.muedsa.wfapp.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +37,8 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
     private ArrayList<Alert> alerts;
     private AlertFragment alertFragment;
     private Translation translation;
+
+    private Drawable crDrawable;
 
     public AlertAdapter(AlertFragment alertFragment){
         this.alerts = new ArrayList<>();
@@ -81,6 +84,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
                 }
             }
         }).start();
+        this.crDrawable = this.alertFragment.getActivity().getDrawable(R.drawable.credits);
     }
 
     @Override
@@ -111,12 +115,17 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
         try {
             InputStream inputStream = this.alertFragment.getActivity().getAssets().open("image/" + moreWorth + ".png");
             bitmap = BitmapFactory.decodeStream(inputStream);
+            if(inputStream != null){
+                inputStream.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             //Answers.getInstance().logCustom(new CustomEvent("Unkown Item").putCustomAttribute("item", moreWorth));
         }
         if(bitmap != null){
             holder.imgView.setImageBitmap(bitmap);
+        }else{
+            holder.imgView.setImageDrawable(this.crDrawable);
         }
         holder.tv1.setText(alert.getPlace() + "(" + planet +")");
         holder.tv2.setText(mission + "(" + faction +")");

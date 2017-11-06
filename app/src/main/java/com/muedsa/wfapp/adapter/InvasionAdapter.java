@@ -2,6 +2,7 @@ package com.muedsa.wfapp.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,6 +34,8 @@ public class InvasionAdapter extends RecyclerView.Adapter<InvasionAdapter.Invasi
     private InvasionWorker invasionWorker;
     private Translation translation;
 
+    private Drawable blDrawable;
+
 
     public InvasionAdapter(InvasionFragment invasionFragment){
         this.invasions = new ArrayList<>();
@@ -49,6 +52,7 @@ public class InvasionAdapter extends RecyclerView.Adapter<InvasionAdapter.Invasi
         this.translation = Translation.getInstance(this.invasionFragment.getActivity(), "zh_cn");
         this.invasionWorker = new InvasionWorker(this.workHandler);
         this.invasionWorker.run();
+        this.blDrawable = this.invasionFragment.getActivity().getDrawable(R.drawable.blueprint);
     }
 
 
@@ -94,6 +98,9 @@ public class InvasionAdapter extends RecyclerView.Adapter<InvasionAdapter.Invasi
         try {
             InputStream inputStreamA = this.invasionFragment.getActivity().getAssets().open("image/" + moreWorthA + ".png");
             bitmapA = BitmapFactory.decodeStream(inputStreamA);
+            if(inputStreamA != null){
+                inputStreamA.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             //Answers.getInstance().logCustom(new CustomEvent("Unkown Item").putCustomAttribute("item", moreWorthA));
@@ -101,16 +108,22 @@ public class InvasionAdapter extends RecyclerView.Adapter<InvasionAdapter.Invasi
         try {
             InputStream inputStreamB = this.invasionFragment.getActivity().getAssets().open("image/" + moreWorthB + ".png");
             bitmapB = BitmapFactory.decodeStream(inputStreamB);
+            if(inputStreamB != null){
+                inputStreamB.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             //Answers.getInstance().logCustom(new CustomEvent("Unkown Item").putCustomAttribute("item", moreWorthB));
         }
         if(bitmapA != null){
             holder.imgView1.setImageBitmap(bitmapA);
-
+        }else{
+            holder.imgView1.setImageDrawable(this.blDrawable);
         }
         if(bitmapB != null){
             holder.imgView2.setImageBitmap(bitmapB);
+        }else{
+            holder.imgView1.setImageDrawable(this.blDrawable);
         }
         holder.tv1.setText(factionA);
         holder.tv2.setText(factionB);
