@@ -66,7 +66,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
                 holder.checkedTextView.setChecked(true);
             }
         }
-        holder.checkedTextView.setText(value);
+        holder.checkedTextView.setText(value + "(" + key + ")");
         holder.checkedTextView.setTag(key);
         holder.checkedTextView.setOnClickListener(this.onClickListener);
     }
