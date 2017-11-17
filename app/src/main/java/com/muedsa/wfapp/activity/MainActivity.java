@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 threadLock = 1;
             }
-
+    
             @Override
             public void onPageScrollStateChanged(int state) {
                 switch (state){
